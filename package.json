@@ -1,0 +1,17 @@
+{
+  "name": "astrobot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@discordjs/rest": "^2.4.0",
+    "discord-api-types": "^0.37.97",
+    "discord.js": "^14.16.2",
+    "dotenv": "^16.4.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lucjanmnm",
+  "license": "ISC"
+}
