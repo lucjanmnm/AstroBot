@@ -7,7 +7,8 @@
     "@discordjs/rest": "^2.4.0",
     "discord-api-types": "^0.37.97",
     "discord.js": "^14.16.2",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "sqlite3": "^5.1.7"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

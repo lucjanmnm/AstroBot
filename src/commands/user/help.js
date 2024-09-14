@@ -7,7 +7,6 @@ module.exports = {
         .setName("help")
         .setDescription('Displays a list of available bot commands'),
     async execute(interaction) {
-        // Funkcja pomocnicza do ładowania komend z folderów
         function loadCommandsFromFolder(folderPath) {
             const files = fs.readdirSync(folderPath).filter(file => file.endsWith('.js'));
             const commands = [];
@@ -27,17 +26,14 @@ module.exports = {
             return commands;
         }
 
-        // Ładowanie komend z folderów user i admin
         const userCommands = loadCommandsFromFolder(path.resolve(__dirname, '../../commands/user'));
         const adminCommands = loadCommandsFromFolder(path.resolve(__dirname, '../../commands/admin'));
 
         const allCommands = userCommands.concat(adminCommands);
 
-        // Pobierz zarejestrowane komendy z API Discorda
         const registeredCommands = await interaction.client.application.commands.fetch();
         const commandMap = new Map(registeredCommands.map(cmd => [cmd.name, cmd.id]));
 
-        // Wzbogac lokalne komendy o identyfikatory
         const commandsWithIds = allCommands.map(command => ({
             name: command.name,
             description: command.description,
@@ -53,7 +49,6 @@ module.exports = {
             return await interaction.reply({ embeds: [embed] });
         }
 
-        // Podziel komendy na grupy po 25
         const embeds = [];
         for (let i = 0; i < commandsWithIds.length; i += 25) {
             const currentCommands = commandsWithIds.slice(i, i + 25);
@@ -73,7 +68,6 @@ module.exports = {
             embeds.push(embed);
         }
 
-        // Wyślij wszystkie embedowane wiadomości
         await interaction.reply({ embeds });
     }
 };
