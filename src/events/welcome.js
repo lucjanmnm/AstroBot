@@ -15,8 +15,8 @@ module.exports = {
           const people = member.guild.memberCount;
 
           const welcomeEmbed = new EmbedBuilder()
-            .setTitle('Witaj użytkowniku!')
-            .setDescription(`Witaj, <@${member.user.id}>! \n Jesteś **${people}** osobą na serwerze!`)
+          .setTitle(`Witaj <@${member.user.id}> na ZygzakCode - Usługi Minecraft!`)
+          .setDescription(`Mamy nadzieję, że zostaniesz u nas na dłużej 😁\n Aktualnie posiadamy: **${people}** osób.`)
             .setColor('Green')
             .setThumbnail(member.user.displayAvatarURL())
             .setTimestamp();

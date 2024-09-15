@@ -13,8 +13,8 @@ module.exports = {
       const people = member.guild.memberCount;
 
       const byeEmbed = new EmbedBuilder()
-        .setTitle('Żegnaj użytkowniku!')
-        .setDescription(`Żegnaj, <@${member.user.id}>! \n Pozostało **${people}** osób na serwerze.`)
+        .setTitle(`Żegnaj <@${member.user.id}> opuściłeś ZygzakCode - Usługi Minecraft!`)
+        .setDescription(`Mamy nadzieję, że kiedyś do nas wrócisz 😭\n Aktualnie posiadamy: **${people}** osób.`)
         .setColor('Red')
         .setThumbnail(member.user.displayAvatarURL())
         .setTimestamp();
