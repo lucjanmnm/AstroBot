@@ -15,10 +15,11 @@ module.exports = {
           const people = member.guild.memberCount;
 
           const welcomeEmbed = new EmbedBuilder()
-          .setTitle(`Witaj <@${member.user.id}> na ZygzakCode - Usługi Minecraft!`)
-          .setDescription(`Mamy nadzieję, że zostaniesz u nas na dłużej 😁\n Aktualnie posiadamy: **${people}** osób.`)
+          .setTitle(`Witaj ${member.user.username} na ZygzakCode - Usługi Minecraft!`)
+          .setDescription(`<@${member.user.id}> mamy nadzieję, że zostaniesz u nas na dłużej 😁\n Aktualnie posiadamy: **${people}** osób.`)
             .setColor('Green')
             .setThumbnail(member.user.displayAvatarURL())
+            .setFooter({text: ` © 2024 • ZygzakCode `})
             .setTimestamp();
 
           await welcomeChannel.send({ embeds: [welcomeEmbed] });

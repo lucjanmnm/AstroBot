@@ -3,7 +3,7 @@ const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, Embed
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('weryfikacja')
-    .setDescription('Generuje formularz weryfikacji matematycznej.'),
+    .setDescription('Generuje formularz weryfikacji.'),
 
   /**
    * @param {Client} client
@@ -20,8 +20,9 @@ module.exports = {
     client.tempMathProblem = { num1, num2, correctAnswer };
 
     const verificationEmbed = new EmbedBuilder()
-      .setTitle('Weryfikacja')
-      .setDescription('Kliknij przycisk poniżej, aby rozpocząć weryfikację.');
+      .setTitle('Weryfikacja || ZygzakCraft.pl')
+      .setDescription('Witaj, aby się zweryfikować należy kliknąć przycisk poniżej.\n・Pamiętaj, wchodząc na serwer akceptujesz automatycznie regulamin serwera')
+      .setFooter({text: ` © 2024 • ZygzakCode `});
 
     const verificationButton = new ButtonBuilder()
       .setCustomId('verification_button')

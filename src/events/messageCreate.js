@@ -1,5 +1,7 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Client } = require('discord.js');
 const db = require('../utils/database');
+const { antiLink } = require('../services/antiLink');
+const { antiSwearing } = require('../services/antiSwear');
 
 module.exports = {
   name: 'messageCreate',
@@ -9,18 +11,23 @@ module.exports = {
    * @param {Message} message
    */
   async execute(client, message) {
-    const PROPOSAL_CHANNEL_ID = '1284195111726485569'; // Replace with your channel ID
-    
+    await antiLink(message);
+
+    await antiSwearing(message);
+
+    const PROPOSAL_CHANNEL_ID = '1284195111726485569'; 
+
     if (message.channel.id === PROPOSAL_CHANNEL_ID && message.content.trim()) {
       try {
-        // Create the embed
+        // Create the embed for the main channel
         const guild = await client.guilds.fetch('1284195110237769801'); 
         const proposalEmbed = new EmbedBuilder()
-          .setTitle(`Propozycja || AstroBot`)
+          .setTitle(`Propozycja || ZygzakCode.pl`)
           .setDescription(`> **Autor Propozycji:**\n> <@${message.author.id}>\n\n> **Treść Propozycji:**\n> ` + '`' + `${message.content}` + '`')
           .setThumbnail(guild.iconURL({ size: 1024 }))
           .setTimestamp()
-          .setColor('#00FF00'); // Green color for the embed
+          .setFooter({ text: `© 2024 • ZygzakCode` })
+          .setColor('#00FF00');
 
         // Create buttons
         const actionRow = new ActionRowBuilder()
@@ -35,10 +42,16 @@ module.exports = {
               .setStyle(ButtonStyle.Danger)
           );
 
-        // Send the embed
-        await message.channel.send({
+        // Send the embed with buttons in the main channel
+        const sentMessage = await message.channel.send({
           embeds: [proposalEmbed],
           components: [actionRow],
+        });
+
+        // Create a thread for the proposal
+        const thread = await sentMessage.startThread({
+          name: `Propozycja od ${message.author.username}`,
+          autoArchiveDuration: 1440, // Auto-archive after 24 hours
         });
 
         // Store the suggestion in the database

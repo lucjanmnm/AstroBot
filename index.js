@@ -1,5 +1,6 @@
 const { loadCommands, loadEvents } = require("./handler");
 const { Client, GatewayIntentBits, ActivityType, ChannelType } = require('discord.js');
+const checkTempBans = require('./src/utils/checkTempBans');
 
 const client = new Client({
     intents: [
@@ -22,6 +23,8 @@ client.once('ready', async () => {
     
     await loadCommands(client);
     await loadEvents(client);
+
+    setInterval(() => checkTempBans(client), 5 * 60 * 1000);
 });
 
 client.login(process.env.TOKEN);

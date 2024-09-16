@@ -169,6 +169,7 @@ module.exports = {
         .setTitle('Zgłoszenie przyjęte')
         .setDescription(`Typ zgłoszenia: ${ticketType}`)
         .setColor('#00FF00')
+        .setFooter({text: ` © 2024 • ZygzakCode `})
         .setTimestamp();
 
       const actionRow = new ActionRowBuilder()
@@ -236,6 +237,7 @@ module.exports = {
         .setTitle('Zgłoszenie otwarte ponownie')
         .setDescription('Kanał został ponownie otwarty.')
         .setColor('#00FF00')
+        .setFooter({text: ` © 2024 • ZygzakCode `})
         .setTimestamp();
 
       const reopenActionRow = new ActionRowBuilder()

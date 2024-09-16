@@ -26,6 +26,7 @@ module.exports = {
       .setDescription(`${description}`)
       .setColor(`${color}`)
       .setTimestamp()
+      .setFooter({text: ` © 2024 • ZygzakCode `});
   
       return channel.send({ embeds: [embed] });
     },

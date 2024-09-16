@@ -5,7 +5,7 @@ const path = require('path');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("help")
-        .setDescription('Displays a list of available bot commands'),
+        .setDescription('Pokazuje dostępne komendy'),
     async execute(interaction) {
         function loadCommandsFromFolder(folderPath) {
             const files = fs.readdirSync(folderPath).filter(file => file.endsWith('.js'));
@@ -42,9 +42,9 @@ module.exports = {
 
         if (!commandsWithIds.length) {
             const embed = new EmbedBuilder()
-                .setTitle('`⚒️` List of Bot Commands')
-                .setDescription('No commands available.')
-                .setColor('Yellow');
+                .setTitle('`⚒️` Help:')
+                .setDescription('Brak dostępnych komend.')
+                .setColor('Red');
 
             return await interaction.reply({ embeds: [embed] });
         }
@@ -53,9 +53,10 @@ module.exports = {
         for (let i = 0; i < commandsWithIds.length; i += 25) {
             const currentCommands = commandsWithIds.slice(i, i + 25);
             const embed = new EmbedBuilder()
-                .setTitle('`⚒️` List of Bot Commands')
-                .setDescription('`»` Available bot commands in Alpha 1.0.0 `«`')
-                .setColor('Yellow');
+                .setTitle('`⚒️` Help:')
+                .setDescription('`»` Lista komend bota ZygzakCode.pl `«`')
+                .setFooter({text: ` © 2024 • ZygzakCode `})
+                .setColor('Blue');
 
             currentCommands.forEach((command, index) => {
                 embed.addFields({

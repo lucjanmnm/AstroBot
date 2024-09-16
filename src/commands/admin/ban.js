@@ -58,6 +58,7 @@ module.exports = {
                     .setTitle("Ban!")
                     .setDescription(`> Użytkownik <@${target.id}> został zbanowany\n\n**Powód:**\n ${reason}\n**Moderator:**\n<@${interaction.user.id}>`)
                     .setColor("Red")
+                    .setFooter({text: ` © 2024 • ZygzakCode `})
                     .setTimestamp();
 
                 await logChannel.send({ embeds: [logEmbed] });
