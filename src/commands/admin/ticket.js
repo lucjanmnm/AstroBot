@@ -4,7 +4,7 @@ const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, PermissionFlags
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('ticket')
-    .setDescription('Utwórz zgłoszenie'),
+    .setDescription('Generuje formularz zgłoszeń'),
 
   async execute(interaction) {
     if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
@@ -15,7 +15,7 @@ module.exports = {
       .setTitle('Zgłoszenie')
       .setDescription('Wybierz typ zgłoszenia z menu poniżej')
       .setColor('#00FF00')
-      .setFooter({text: ` © 2024 • ZygzakCode `})
+      .setFooter({text: ` © 2024 • AstroBot `})
       .setTimestamp();
 
     const row = new ActionRowBuilder()

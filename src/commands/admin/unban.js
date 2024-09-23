@@ -35,7 +35,7 @@ module.exports = {
                     .setTitle("Unban!")
                     .setDescription(`> Użytkownik o ID ${userId} został odbanowany\n\n**Moderator:**\n<@${interaction.user.id}>`)
                     .setColor("Yellow")
-                    .setFooter({text: ` © 2024 • ZygzakCode `})
+                    .setFooter({text: ` © 2024 • AstroBot `})
                     .setTimestamp();
 
                 await logChannel.send({ embeds: [logEmbed] });
@@ -43,7 +43,7 @@ module.exports = {
                 console.error("Failed to find a valid log channel.");
             }
 
-            const banChannel = interaction.guild.channels.cache.get('1284195110615122006'); 
+            const banChannel = interaction.guild.channels.cache.get('1287064899964506125'); 
             if (banChannel) {
                 const bansCount = (await interaction.guild.bans.fetch()).size;
                 await banChannel.setName(`⛔ Bany: ${bansCount}`);

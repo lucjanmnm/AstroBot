@@ -25,7 +25,6 @@ module.exports = {
     try {
       await member.timeout(null, 'Unmute');
 
-      // Send DM to the user
       const dmEmbed = new EmbedBuilder()
         .setColor('Green')
         .setDescription(`✅ Zostałeś odciszony na serwerze: ${interaction.guild.name}.`);
@@ -33,14 +32,13 @@ module.exports = {
         console.error('Failed to send DM to the unmuted user:', err);
       });
 
-      // Log the unmute
       const logChannel = interaction.channel;
       if (logChannel) {
         const logEmbed = new EmbedBuilder()
           .setTitle('Unmute!')
           .setDescription(`> Użytkownik <@${user.id}> został odciszony\n\n**Moderator:**\n<@${interaction.user.id}>`)
           .setColor('Green')
-          .setFooter({ text: '© 2024 • ZygzakCode' })
+          .setFooter({ text: '© 2024 • AstroBot' })
           .setTimestamp();
         await logChannel.send({ embeds: [logEmbed] });
       } else {

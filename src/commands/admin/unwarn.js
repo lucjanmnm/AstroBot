@@ -32,7 +32,6 @@ module.exports = {
         interaction.reply({ content: `Ostrzeżenia dla użytkownika ${user.tag} zostały usunięte.`, ephemeral: true });
       });
 
-      // Send DM to the user
       const dmEmbed = new EmbedBuilder()
         .setColor('Green')
         .setDescription(`✅ Twoje ostrzeżenia na serwerze: ${interaction.guild.name} zostały usunięte.`);
@@ -40,14 +39,13 @@ module.exports = {
         console.error('Failed to send DM to the unwarned user:', err);
       });
 
-      // Log the unwarn
       const logChannel = interaction.channel;
       if (logChannel) {
         const logEmbed = new EmbedBuilder()
           .setTitle('Unwarn!')
           .setDescription(`> Ostrzeżenia dla użytkownika <@${user.id}> zostały usunięte\n\n**Moderator:**\n<@${interaction.user.id}>`)
           .setColor('Green')
-          .setFooter({ text: '© 2024 • ZygzakCode' })
+          .setFooter({ text: '© 2024 • AstroBot' })
           .setTimestamp();
         await logChannel.send({ embeds: [logEmbed] });
       } else {

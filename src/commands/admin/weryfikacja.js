@@ -20,9 +20,9 @@ module.exports = {
     client.tempMathProblem = { num1, num2, correctAnswer };
 
     const verificationEmbed = new EmbedBuilder()
-      .setTitle('Weryfikacja || ZygzakCraft.pl')
+      .setTitle('Weryfikacja || AstroBot')
       .setDescription('Witaj, aby się zweryfikować należy kliknąć przycisk poniżej.\n・Pamiętaj, wchodząc na serwer akceptujesz automatycznie regulamin serwera')
-      .setFooter({text: ` © 2024 • ZygzakCode `});
+      .setFooter({text: ` © 2024 • AstroBot `});
 
     const verificationButton = new ButtonBuilder()
       .setCustomId('verification_button')

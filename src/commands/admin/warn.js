@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
 const db = require('../../utils/warns');
-const { checkWarningsAndApplyTempBan } = require('../../services/tempBan'); // Import the function
+const { checkWarningsAndApplyTempBan } = require('../../services/tempBan'); 
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -30,7 +30,6 @@ module.exports = {
     }
 
     try {
-      // Send DM to the user
       const dmEmbed = new EmbedBuilder()
         .setColor('Yellow')
         .setDescription(`⚠️ Zostałeś ostrzeżony na serwerze: ${interaction.guild.name}. Powód: ${reason}`);
@@ -38,28 +37,25 @@ module.exports = {
         console.error('Failed to send DM to the warned user:', err);
       });
 
-      // Log the warn
       const logChannel = interaction.channel;
       if (logChannel) {
         const logEmbed = new EmbedBuilder()
           .setTitle('Warn!')
           .setDescription(`> Użytkownik <@${user.id}> został ostrzeżony\n\n**Powód:**\n ${reason}\n**Moderator:**\n<@${interaction.user.id}>`)
           .setColor('Yellow')
-          .setFooter({ text: '© 2024 • ZygzakCode' })
+          .setFooter({ text: '© 2024 • AstroBot' })
           .setTimestamp();
         await logChannel.send({ embeds: [logEmbed] });
       } else {
         console.error('Failed to find a valid log channel.');
       }
 
-      // Insert warn into database
       db.run(`INSERT INTO warns (user_id, guild_id, reason) VALUES (?, ?, ?)`, [user.id, guild.id, reason], async (err) => {
         if (err) {
           console.error('Error inserting warn into database:', err.message);
         }
 
-        // Check if the user needs to be temporarily banned
-        await checkWarningsAndApplyTempBan(interaction.client, user.id, guild.id); // Pass the client
+        await checkWarningsAndApplyTempBan(interaction.client, user.id, guild.id); 
       });
 
       interaction.reply({ content: `Użytkownik ${user.tag} został ostrzeżony za: ${reason}.`, ephemeral: true });

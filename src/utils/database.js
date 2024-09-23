@@ -1,12 +1,12 @@
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./baza.db', (err) => {
+const db = new sqlite3.Database('./src/utils/baza.db', (err) => {
   if (err) {
     console.error('Błąd podczas otwierania bazy danych:', err.message);
   }
 });
 
 db.serialize(() => {
-  db.run("PRAGMA busy_timeout = 3000"); // 3000 ms = 3 sekundy
+  db.run("PRAGMA busy_timeout = 3000"); 
   db.run(`
     CREATE TABLE IF NOT EXISTS votes (
       id TEXT PRIMARY KEY,

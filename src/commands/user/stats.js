@@ -14,7 +14,7 @@ module.exports = {
         const embed = new EmbedBuilder()
         .setTitle('`📊` Statystyki')
         .setDescription('`🏓` **Ping:** `' + `${latency}ms` + '`')
-        .setFooter({text: ` © 2024 • ZygzakCode `});
+        .setFooter({text: ` © 2024 • AstroBot `});
         
         interaction.editReply({ embeds: [embed]});
     }

@@ -11,25 +11,22 @@ module.exports = {
    * @param {Message} message
    */
   async execute(client, message) {
-    await antiLink(message);
+    await antiSwearing(client, message);
+    await antiLink(client, message);
 
-    await antiSwearing(message);
-
-    const PROPOSAL_CHANNEL_ID = '1284195111726485569'; 
+    const PROPOSAL_CHANNEL_ID = '1287064901814063238'; 
 
     if (message.channel.id === PROPOSAL_CHANNEL_ID && message.content.trim()) {
       try {
-        // Create the embed for the main channel
-        const guild = await client.guilds.fetch('1284195110237769801'); 
+        const guild = await client.guilds.fetch('1287064899893198878'); 
         const proposalEmbed = new EmbedBuilder()
-          .setTitle(`Propozycja || ZygzakCode.pl`)
+          .setTitle(`Propozycja || AstroBot`)
           .setDescription(`> **Autor Propozycji:**\n> <@${message.author.id}>\n\n> **Treść Propozycji:**\n> ` + '`' + `${message.content}` + '`')
           .setThumbnail(guild.iconURL({ size: 1024 }))
           .setTimestamp()
-          .setFooter({ text: `© 2024 • ZygzakCode` })
+          .setFooter({ text: `© 2024 • AstroBot` })
           .setColor('#00FF00');
 
-        // Create buttons
         const actionRow = new ActionRowBuilder()
           .addComponents(
             new ButtonBuilder()
@@ -42,19 +39,16 @@ module.exports = {
               .setStyle(ButtonStyle.Danger)
           );
 
-        // Send the embed with buttons in the main channel
         const sentMessage = await message.channel.send({
           embeds: [proposalEmbed],
           components: [actionRow],
         });
 
-        // Create a thread for the proposal
         const thread = await sentMessage.startThread({
           name: `Propozycja od ${message.author.username}`,
-          autoArchiveDuration: 1440, // Auto-archive after 24 hours
+          autoArchiveDuration: 1440, 
         });
 
-        // Store the suggestion in the database
         db.run(`
           INSERT INTO votes (id, user, suggestion, approved, rejected)
           VALUES (?, ?, ?, 0, 0)
@@ -62,7 +56,6 @@ module.exports = {
           if (err) console.error('Błąd podczas zapisywania propozycji:', err);
         });
 
-        // Delete the original message
         message.delete().catch(() => {});
       } catch (error) {
         console.error('Error handling message create:', error);
