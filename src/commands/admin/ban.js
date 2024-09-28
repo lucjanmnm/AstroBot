@@ -13,8 +13,8 @@ module.exports = {
      */
     async execute(interaction, client) {
         await interaction.deferReply({ ephemeral: true });
-        const banChannelId = '1284195110615122006';
-        const logChannelId = '1284195111726485566';
+        const banChannelId = '1287064901289902095';
+        const logChannelId = '1287064901289902096';
 
         if (!interaction.member.permissions.has(PermissionFlagsBits.BanMembers)) {
             return interaction.editReply({ content: "Nie posiadasz uprawnień do banowania członków." });
@@ -56,7 +56,7 @@ module.exports = {
                 .setTitle("Ban!")
                 .setDescription(`**Użytkownik:** <@${target.id}> został zbanowany\n**Powód:** ${reason}\n**Moderator:** <@${interaction.user.id}>`)
                 .setColor("Red")
-                .setFooter({ text: ` © 2024 • ZygzakCode ` })
+                .setFooter({ text: ` © 2024 • AstroBot ` })
                 .setTimestamp();
 
             const logChannel = await interaction.guild.channels.fetch(logChannelId);

@@ -14,6 +14,7 @@ const {
 const db = require('../utils/database');
 
 const TICKET_CATEGORY_ID = '1284195110615122009'; 
+const LOG_CHANNEL_ID = '1284195111726485566'; 
 
 module.exports = {
   name: 'interactionCreate',
@@ -29,6 +30,7 @@ module.exports = {
       });
     }
 
+    // Command interaction handling
     if (interaction.isCommand()) {
       if (!client.commands.has(interaction.commandName)) return;
 
@@ -39,6 +41,7 @@ module.exports = {
       interactionFunction(interaction, client);
     }
 
+    // Verification button handling
     if (interaction.isButton() && interaction.customId === 'verification_button') {
       if (!client.tempMathProblem) {
         return await interaction.reply({
@@ -65,11 +68,12 @@ module.exports = {
       await interaction.showModal(modal);
     }
 
+    // Modal submission handling
     if (interaction.isModalSubmit() && interaction.customId === 'verification_modal') {
       const userAnswer = interaction.fields.getTextInputValue('answer');
       const { correctAnswer } = client.tempMathProblem || {};
 
-      await interaction.deferReply({ ephemeral: true }); 
+      await interaction.deferReply({ ephemeral: true }); // Defer the reply
 
       if (userAnswer === correctAnswer.toString()) {
         const member = await interaction.guild.members.fetch(interaction.user.id);
@@ -95,12 +99,14 @@ module.exports = {
       client.tempMathProblem = { num1, num2, correctAnswer: newCorrectAnswer };
     }
 
+    // Voting button handling
     if (interaction.isButton() && (interaction.customId.startsWith('approve_') || interaction.customId.startsWith('reject_'))) {
       const [action, messageId] = interaction.customId.split('_');
       const voteType = action === 'approve' ? 'approved' : 'rejected';
     
-      await interaction.deferReply({ ephemeral: true });
+      await interaction.deferReply({ ephemeral: true }); // Defer the reply
 
+      // Fetch the current votes
       db.get(`SELECT * FROM votes WHERE id = ?`, [messageId], async (err, row) => {
         if (err) {
           console.error('Błąd podczas pobierania głosów:', err);
@@ -115,6 +121,7 @@ module.exports = {
           });
         }
     
+        // Check if the user has already voted
         db.get(
           `SELECT * FROM user_votes WHERE user_id = ? AND message_id = ?`,
           [interaction.user.id, messageId],
@@ -127,6 +134,7 @@ module.exports = {
             }
     
             if (userVote) {
+              // User has already voted, update their vote
               if (userVote.vote_type !== voteType) {
                 db.run(
                   `UPDATE votes SET ${userVote.vote_type} = ${userVote.vote_type} - 1, ${voteType} = ${voteType} + 1 WHERE id = ?`,
@@ -148,6 +156,7 @@ module.exports = {
                 });
               }
             } else {
+              // New vote
               db.run(
                 `UPDATE votes SET ${voteType} = ${voteType} + 1 WHERE id = ?`,
                 [messageId],
@@ -164,6 +173,7 @@ module.exports = {
               );
             }
     
+            // Calculate the percentages
             db.get(
               `SELECT * FROM votes WHERE id = ?`,
               [messageId],
@@ -182,6 +192,8 @@ module.exports = {
                 const rejectPercent = totalVotes
                   ? Math.round((updatedRow.rejected / totalVotes) * 100)
                   : 0;
+    
+                // Update the buttons
                 const actionRow = new ActionRowBuilder().addComponents(
                   new ButtonBuilder()
                     .setCustomId(`approve_${messageId}`)
@@ -192,7 +204,8 @@ module.exports = {
                     .setLabel(`❌ ${rejectPercent}% [${updatedRow.rejected}]`)
                     .setStyle(ButtonStyle.Danger)
                 );
-
+    
+                // Update the message
                 const message = await interaction.message.fetch();
                 await message.edit({ components: [actionRow] });
     
@@ -204,11 +217,13 @@ module.exports = {
       });
     }
 
+    // Ticket type select menu interaction
     if (interaction.isStringSelectMenu() && interaction.customId === 'select_ticket_type') {
       const ticketType = interaction.values[0];
       const channelName = `${interaction.user.username}-${ticketType}`;
       const user = interaction.user.id;
 
+      // Create a new channel in the specified category
       const channel = await interaction.guild.channels.create({
         name: channelName,
         type: ChannelType.GuildText,
@@ -259,6 +274,7 @@ module.exports = {
       });
     }
 
+    // Close ticket button handling
     if (interaction.isButton() && interaction.customId === 'close_ticket') {
       const channel = interaction.channel;
 

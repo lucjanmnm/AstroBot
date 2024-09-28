@@ -24,7 +24,7 @@ module.exports = {
     const guild = interaction.guild;
     const member = guild.members.cache.get(user.id);
     const reason = interaction.options.getString('powód') || 'Brak powodu';
-    const banChannelId = '1284195110615122006';
+    const banChannelId = '1287064901289902096';
 
     if (!interaction.member.permissions.has(PermissionFlagsBits.BanMembers)) {
       return interaction.reply({ content: 'Nie posiadasz uprawnień do banowania członków.', ephemeral: true });
@@ -52,7 +52,7 @@ module.exports = {
           .setTitle('Temp Ban!')
           .setDescription(`> Użytkownik <@${user.id}> został tymczasowo zbanowany\n\n**Powód:**\n ${reason}\n**Czas:**\n ${time} minut\n**Moderator:**\n<@${interaction.user.id}>`)
           .setColor('Red')
-          .setFooter({ text: '© 2024 • ZygzakCode' })
+          .setFooter({ text: '© 2024 • AstroBot' })
           .setTimestamp();
           interaction.reply({ embeds: [logEmbed] });
       } else {
@@ -83,7 +83,7 @@ module.exports = {
             console.error('Error deleting temporary ban from database:', err.message);
           }
         });
-      }, time * 60 * 1000); 
+      }, time * 60 * 1000);
     } catch (error) {
       console.error('Error banning the user: ', error);
       interaction.reply({ content: 'Wystąpił błąd podczas próby zbanowania użytkownika.', ephemeral: true });

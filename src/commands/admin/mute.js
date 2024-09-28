@@ -23,7 +23,7 @@ module.exports = {
     const reason = interaction.options.getString('powód') || 'Brak powodu';
     const guild = interaction.guild;
     const member = guild.members.cache.get(user.id);
-    const logChannelId = '1284195111726485566';
+    const logChannelId = '1287064901289902096';
     const logChannel = interaction.client.channels.cache.get(logChannelId);
 
     if (!interaction.member.permissions.has(PermissionFlagsBits.ModerateMembers)) {
@@ -50,7 +50,7 @@ module.exports = {
         .setTitle('Mute!')
         .setDescription(`> Użytkownik <@${user.id}> został wyciszony na ${time} minut\n\n**Powód:**\n ${reason}\n**Moderator:**\n<@${interaction.user.id}>`)
         .setColor('Red')
-        .setFooter({ text: '© 2024 • ZygzakCode' })
+        .setFooter({ text: '© 2024 • AstroBot' })
         .setTimestamp();
       await interaction.channel.send({ embeds: [currentChannelLogEmbed] });
 

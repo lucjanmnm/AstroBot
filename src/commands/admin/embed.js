@@ -26,7 +26,7 @@ module.exports = {
       .setDescription(`${description}`)
       .setColor(`${color}`)
       .setTimestamp()
-      .setFooter({text: ` © 2024 • ZygzakCode `});
+      .setFooter({text: ` © 2024 • AstroBot `});
   
       return channel.send({ embeds: [embed] });
     },

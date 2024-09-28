@@ -8,7 +8,7 @@ module.exports = {
    * @param {GuildMember} newMember
    */
   async execute(client, oldMember, newMember) {
-    const boostChannel = newMember.guild.channels.cache.get('1284195111038615558');
+    const boostChannel = newMember.guild.channels.cache.get('1287064899964506129');
 
     if (!boostChannel) return;
 
@@ -23,7 +23,7 @@ module.exports = {
         .setDescription(`Dziękujemy, <@${newMember.user.id}> za zboostowanie serwera! \n Serwer ma teraz **${boosts}** boostów!`)
         .setColor('Purple')
         .setThumbnail(newMember.user.displayAvatarURL())
-        .setFooter({text: ` © 2024 • ZygzakCode `})
+        .setFooter({text: ` © 2024 • AstroBot `})
         .setTimestamp();
 
       await boostChannel.send({ embeds: [boostEmbed] });

@@ -4,20 +4,19 @@ const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, PermissionFlags
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('ticket')
-    .setDescription('Utwórz zgłoszenie'),
+    .setDescription('Generuje formularz zgłoszeń'),
 
   async execute(interaction) {
     if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
-        return interaction.reply({ content: "Nie posiadasz uprawnień do banowania członków.", ephemeral: true });
+        return interaction.editReply({ content: "Nie posiadasz uprawnień do banowania członków." });
     }
 
     const embed = new EmbedBuilder()
       .setTitle('Zgłoszenie')
       .setDescription('Wybierz typ zgłoszenia z menu poniżej')
       .setColor('#00FF00')
-      .setFooter({ text: `© 2024 • ZygzakCode` })
-      .setTimestamp()
-      .setImage('https://i.imgur.com/IjtLcc8.png');
+      .setFooter({text: ` © 2024 • AstroBot `})
+      .setTimestamp();
 
     const row = new ActionRowBuilder()
       .addComponents(
@@ -73,7 +72,6 @@ module.exports = {
           ])
       );
 
-    interaction.channel.send({embeds: [embed], components: [row]})
-    await interaction.reply({content: `Stworzono ticket handler.`, ephemeral: true});
+    await interaction.reply({ embeds: [embed], components: [row] });
   },
 };

@@ -8,9 +8,11 @@ async function antiLink(client, message) {
   const linkRegex = /discord(?:app\.com\/invite|\.gg)\/[a-zA-Z0-9]{2,}/i;
 
   if (linkRegex.test(message.content)) {
+    // Apply warning and timeout
     const userId = message.author.id;
     const guildId = message.guild.id;
 
+    // Add warning to the database
     db.run(`INSERT INTO warns (user_id, guild_id, reason, timestamp) VALUES (?, ?, ?, ?)`, [userId, guildId, 'Link do Discorda', Date.now()], async (err) => {
       if (err) {
         console.error('Błąd podczas zapisywania warnu:', err);
@@ -19,6 +21,7 @@ async function antiLink(client, message) {
       }
     });
 
+    // Apply timeout
     const member = message.guild.members.cache.get(userId);
     if (member) {
       if (member.permissions.has(PermissionFlagsBits.Administrator)) {

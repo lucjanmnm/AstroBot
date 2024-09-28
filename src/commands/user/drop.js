@@ -3,7 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('drop')
-    .setDescription('Losuje zniżkę na ZygzakCode'),
+    .setDescription('Losuje zniżkę na AstroBot'),
   async execute(interaction) {
     const allowedChannelId = '1284195111575748718';
     const logChannelId = '1284195111726485565';
@@ -30,7 +30,7 @@ module.exports = {
       .setTitle('Wynik Dropa')
       .setDescription(isWinner ? winMessage : `# Nie Wygrałeś/aś <@${interaction.user.id}>\n- Niestety przegrałeś/aś spróbuj za 6 godzin\n- Za 6 godzin możesz spróbować i możesz wygrać!`)
       .setColor(isWinner ? '#00FF00' : '#FF0000')
-      .setFooter({text: ` © 2024 •  ZygzakCode `})
+      .setFooter({text: ` © 2024 • AstroBot `})
       .setTimestamp();
 
     const win = new EmbedBuilder()

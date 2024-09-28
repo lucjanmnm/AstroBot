@@ -1,8 +1,8 @@
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./src/utils/giveaways.db');
+const dbg = new sqlite3.Database('./src/utils/giveaways.db');
 
-db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS giveaways (
+dbg.serialize(() => {
+  dbg.run(`CREATE TABLE IF NOT EXISTS giveaways (
     name TEXT PRIMARY KEY,
     description TEXT,
     winners INTEGER,
@@ -10,7 +10,7 @@ db.serialize(() => {
     participants TEXT
   )`);
 
-  db.run(`CREATE TABLE IF NOT EXISTS participants (
+  dbg.run(`CREATE TABLE IF NOT EXISTS participants (
     giveawayName TEXT,
     username TEXT,
     PRIMARY KEY (giveawayName, username),
@@ -21,7 +21,7 @@ db.serialize(() => {
 module.exports = {
   addGiveaway(name, description, winners, endTime) {
     return new Promise((resolve, reject) => {
-      db.run(`INSERT INTO giveaways (name, description, winners, endTime, participants) VALUES (?, ?, ?, ?, ?)`,
+      dbg.run(`INSERT INTO giveaways (name, description, winners, endTime, participants) VALUES (?, ?, ?, ?, ?)`,
         [name, description, winners, endTime, ''],
         (err) => {
           if (err) reject(err);
@@ -33,7 +33,7 @@ module.exports = {
 
   getGiveaway(name) {
     return new Promise((resolve, reject) => {
-      db.get(`SELECT * FROM giveaways WHERE name = ?`, [name], (err, row) => {
+      dbg.get(`SELECT * FROM giveaways WHERE name = ?`, [name], (err, row) => {
         if (err) reject(err);
         resolve(row);
       });
@@ -42,7 +42,7 @@ module.exports = {
 
   updateGiveaway(oldName, newName, description, winners, endTime) {
     return new Promise((resolve, reject) => {
-      db.run(`UPDATE giveaways SET name = ?, description = ?, winners = ?, endTime = ? WHERE name = ?`,
+      dbg.run(`UPDATE giveaways SET name = ?, description = ?, winners = ?, endTime = ? WHERE name = ?`,
         [newName, description, winners, endTime, oldName],
         (err) => {
           if (err) reject(err);
@@ -54,7 +54,7 @@ module.exports = {
 
   deleteGiveaway(name) {
     return new Promise((resolve, reject) => {
-      db.run(`DELETE FROM giveaways WHERE name = ?`, [name], (err) => {
+      dbg.run(`DELETE FROM giveaways WHERE name = ?`, [name], (err) => {
         if (err) reject(err);
         resolve();
       });
@@ -63,7 +63,7 @@ module.exports = {
 
   addParticipant(giveawayName, username) {
     return new Promise((resolve, reject) => {
-      db.run(`INSERT INTO participants (giveawayName, username) VALUES (?, ?)`,
+      dbg.run(`INSERT INTO participants (giveawayName, username) VALUES (?, ?)`,
         [giveawayName, username],
         (err) => {
           if (err) reject(err);
@@ -75,7 +75,7 @@ module.exports = {
 
   removeParticipant(giveawayName, username) {
     return new Promise((resolve, reject) => {
-      db.run(`DELETE FROM participants WHERE giveawayName = ? AND username = ?`,
+      dbg.run(`DELETE FROM participants WHERE giveawayName = ? AND username = ?`,
         [giveawayName, username],
         (err) => {
           if (err) reject(err);
@@ -87,7 +87,7 @@ module.exports = {
 
   getParticipants(giveawayName) {
     return new Promise((resolve, reject) => {
-      db.all(`SELECT username FROM participants WHERE giveawayName = ?`, [giveawayName], (err, rows) => {
+      dbg.all(`SELECT username FROM participants WHERE giveawayName = ?`, [giveawayName], (err, rows) => {
         if (err) reject(err);
         resolve(rows.map(row => row.username));
       });

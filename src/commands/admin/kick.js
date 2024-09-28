@@ -18,7 +18,7 @@ module.exports = {
     const reason = interaction.options.getString('powód') || 'Brak powodu';
     const guild = interaction.guild;
     const member = guild.members.cache.get(user.id);
-    const logChannelId = '1284195111726485566';
+    const logChannelId = '1287064901289902096';
 
     if (!interaction.member.permissions.has(PermissionFlagsBits.KickMembers)) {
       return interaction.reply({ content: 'Nie posiadasz uprawnień do wyrzucania członków.', ephemeral: true });
@@ -42,7 +42,7 @@ module.exports = {
         .setTitle('Kick!')
         .setDescription(`**Użytkownik:** <@${user.id}> został wyrzucony\n**Powód:** ${reason}\n**Moderator:** <@${interaction.user.id}>`)
         .setColor('Red')
-        .setFooter({ text: ` © 2024 • ZygzakCode ` })
+        .setFooter({ text: ` © 2024 • AstroBot ` })
         .setTimestamp();
 
       const logChannel = await interaction.guild.channels.fetch(logChannelId);

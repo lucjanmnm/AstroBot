@@ -10,9 +10,11 @@ async function antiSwearing(client, message) {
   const containsSwearWord = SWEARING_WORDS.some(swearWord => lowerCaseContent.includes(swearWord));
 
   if (containsSwearWord) {
+    // Apply warning and timeout
     const userId = message.author.id;
     const guildId = message.guild.id;
 
+    // Add warning to the database
     db.run(`INSERT INTO warns (user_id, guild_id, reason, timestamp) VALUES (?, ?, ?, ?)`, [userId, guildId, 'Przeklinanie', Date.now()], async (err) => {
       if (err) {
         console.error('Błąd podczas zapisywania warnu:', err);
@@ -21,6 +23,7 @@ async function antiSwearing(client, message) {
       }
     });
 
+    // Apply timeout
     const member = message.guild.members.cache.get(userId);
     if (member) {
       if (member.permissions.has(PermissionFlagsBits.Administrator)) {
