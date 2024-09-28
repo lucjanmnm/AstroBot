@@ -12,9 +12,10 @@ const {
   EmbedBuilder,
 } = require('discord.js');
 const db = require('../utils/database');
+const dbg = require('../utils/giveawayDatabase');
 
-const TICKET_CATEGORY_ID = '1284195110615122009'; 
-const LOG_CHANNEL_ID = '1284195111726485566'; 
+const TICKET_CATEGORY_ID = '1284195110615122009';
+const LOG_CHANNEL_ID = '1284195111726485566';
 
 module.exports = {
   name: 'interactionCreate',
@@ -99,11 +100,58 @@ module.exports = {
       client.tempMathProblem = { num1, num2, correctAnswer: newCorrectAnswer };
     }
 
+// Giveaway join button handling
+if (interaction.isButton() && interaction.customId.startsWith('join_')) {
+  const name = interaction.customId.split('_')[1];
+  const messageId = interaction.message.id;
+  const giveaway = await dbg.getGiveawayByMessageId(messageId);
+
+  if (!giveaway) {
+    return interaction.reply({
+      content: `Nie znaleziono giveaway o nazwie "${name}".`,
+      ephemeral: true,
+    });
+  }
+
+  const participants = await dbg.getParticipants(giveaway.id);
+  if (participants.includes(interaction.user.id)) {
+    return interaction.reply({
+      content: 'Już dołączyłeś do tego giveaway.',
+      ephemeral: true,
+    });
+  }
+
+  // Dodaj uczestnika do giveaway
+  await dbg.addParticipant(giveaway.id, interaction.user.id);
+  
+  // Zaktualizuj liczbę uczestników
+  const updatedParticipants = await dbg.getParticipants(giveaway.id);
+  
+  // Zaktualizuj embed
+  const embed = interaction.message.embeds[0];
+  const newEmbed = EmbedBuilder.from(embed)
+    .spliceFields(1, 1, { 
+      name: 'Liczba uczestników', 
+      value: updatedParticipants.length.toString(), 
+      inline: true 
+    });
+
+  // Aktualizuj wiadomość z embedem
+  await interaction.update({ embeds: [newEmbed] });
+
+  // Powiadom użytkownika, że dołączył do giveaway
+  await interaction.followUp({
+    content: 'Dołączyłeś do giveaway!',
+    ephemeral: true,
+  });
+}
+
+
     // Voting button handling
     if (interaction.isButton() && (interaction.customId.startsWith('approve_') || interaction.customId.startsWith('reject_'))) {
       const [action, messageId] = interaction.customId.split('_');
       const voteType = action === 'approve' ? 'approved' : 'rejected';
-    
+
       await interaction.deferReply({ ephemeral: true }); // Defer the reply
 
       // Fetch the current votes
@@ -114,13 +162,13 @@ module.exports = {
             content: 'Wystąpił błąd podczas głosowania.',
           });
         }
-    
+
         if (!row) {
           return await interaction.editReply({
             content: 'Propozycja nie została znaleziona.',
           });
         }
-    
+
         // Check if the user has already voted
         db.get(
           `SELECT * FROM user_votes WHERE user_id = ? AND message_id = ?`,
@@ -132,7 +180,7 @@ module.exports = {
                 content: 'Wystąpił błąd podczas głosowania.',
               });
             }
-    
+
             if (userVote) {
               // User has already voted, update their vote
               if (userVote.vote_type !== voteType) {
@@ -172,7 +220,7 @@ module.exports = {
                 }
               );
             }
-    
+
             // Calculate the percentages
             db.get(
               `SELECT * FROM votes WHERE id = ?`,
@@ -184,7 +232,7 @@ module.exports = {
                     content: 'Wystąpił błąd podczas aktualizacji głosów.',
                   });
                 }
-    
+
                 const totalVotes = updatedRow.approved + updatedRow.rejected;
                 const approvePercent = totalVotes
                   ? Math.round((updatedRow.approved / totalVotes) * 100)
@@ -192,7 +240,7 @@ module.exports = {
                 const rejectPercent = totalVotes
                   ? Math.round((updatedRow.rejected / totalVotes) * 100)
                   : 0;
-    
+
                 // Update the buttons
                 const actionRow = new ActionRowBuilder().addComponents(
                   new ButtonBuilder()
@@ -204,11 +252,11 @@ module.exports = {
                     .setLabel(`❌ ${rejectPercent}% [${updatedRow.rejected}]`)
                     .setStyle(ButtonStyle.Danger)
                 );
-    
+
                 // Update the message
                 const message = await interaction.message.fetch();
                 await message.edit({ components: [actionRow] });
-    
+
                 await interaction.editReply({ content: 'Głos został zapisany!' });
               }
             );
@@ -228,61 +276,38 @@ module.exports = {
         name: channelName,
         type: ChannelType.GuildText,
         parent: TICKET_CATEGORY_ID,
-        topic: `Zgłoszenie typu: ${ticketType}`,
         permissionOverwrites: [
           {
-            id: interaction.guild.id,
+            id: interaction.guild.roles.everyone,
             deny: [PermissionsBitField.Flags.ViewChannel],
           },
           {
             id: user,
-            allow: [
-              PermissionsBitField.Flags.ViewChannel,
-              PermissionsBitField.Flags.SendMessages,
-              PermissionsBitField.Flags.ReadMessageHistory,
-            ],
-          },
-          {
-            id: '1284195110615122000', 
-            allow: [
-              PermissionsBitField.Flags.ViewChannel,
-              PermissionsBitField.Flags.SendMessages,
-              PermissionsBitField.Flags.ReadMessageHistory,
-            ],
+            allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages],
           },
         ],
       });
 
+      // Send a message to the new channel
       const embed = new EmbedBuilder()
-        .setTitle('Zgłoszenie przyjęte')
-        .setDescription(`Typ zgłoszenia: ${ticketType}`)
-        .setColor('#00FF00')
-        .setFooter({ text: ` © 2024 • ZygzakCode ` })
+        .setTitle('Ticket Utworzony')
+        .setDescription(`Twój ticket został utworzony: ${ticketType}`)
         .setTimestamp();
 
-      const actionRow = new ActionRowBuilder().addComponents(
-        new ButtonBuilder()
-          .setCustomId('close_ticket')
-          .setLabel('Zamknij zgłoszenie')
-          .setStyle(ButtonStyle.Danger)
-      );
+      await channel.send({ embeds: [embed] });
 
-      await channel.send({ embeds: [embed], components: [actionRow] });
-      await interaction.reply({
-        content: `Zgłoszenie utworzone: ${channel}`,
-        ephemeral: true,
-      });
-    }
+      // Log the ticket creation
+      const logEmbed = new EmbedBuilder()
+        .setTitle('Nowy Ticket')
+        .setDescription(`Użytkownik ${interaction.user.tag} utworzył ticket o typie: ${ticketType}`)
+        .setTimestamp();
 
-    // Close ticket button handling
-    if (interaction.isButton() && interaction.customId === 'close_ticket') {
-      const channel = interaction.channel;
+      const logChannel = await client.channels.fetch(LOG_CHANNEL_ID);
+      if (logChannel) {
+        await logChannel.send({ embeds: [logEmbed] });
+      }
 
-      await channel.delete();
-      await interaction.reply({
-        content: 'Zgłoszenie zostało zamknięte.',
-        ephemeral: true,
-      });
+      await interaction.reply({ content: 'Twój ticket został utworzony!', ephemeral: true });
     }
   },
 };

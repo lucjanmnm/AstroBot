@@ -15,7 +15,8 @@ module.exports = {
       .setTitle('Zgłoszenie')
       .setDescription('Wybierz typ zgłoszenia z menu poniżej')
       .setColor('#00FF00')
-      .setFooter({text: ` © 2024 • AstroBot `})
+      .setFooter({text: ` © 2024 • ZygzakCode `})
+      .setImage('https://i.imgur.com/IjtLcc8.png')
       .setTimestamp();
 
     const row = new ActionRowBuilder()

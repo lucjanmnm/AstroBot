@@ -26,7 +26,7 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setTitle(`Ostrzeżenia dla ${user.tag}`)
         .setColor('Yellow')
-        .setFooter({ text: '© 2024 • AstroBot' })
+        .setFooter({ text: '© 2024 • ZygzakCode' })
         .setTimestamp();
 
       rows.forEach((row, index) => {

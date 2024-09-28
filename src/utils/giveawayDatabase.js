@@ -1,95 +1,100 @@
 const sqlite3 = require('sqlite3').verbose();
-const dbg = new sqlite3.Database('./src/utils/giveaways.db');
+const db = new sqlite3.Database('./src/utils/giveaways.db');
 
-dbg.serialize(() => {
-  dbg.run(`CREATE TABLE IF NOT EXISTS giveaways (
-    name TEXT PRIMARY KEY,
-    description TEXT,
-    winners INTEGER,
-    endTime INTEGER,
-    participants TEXT
-  )`);
+db.serialize(() => {
+  db.run(`
+    CREATE TABLE IF NOT EXISTS giveaways (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      description TEXT,
+      winners INTEGER,
+      endTime INTEGER,
+      messageId TEXT
+    )
+  `);
 
-  dbg.run(`CREATE TABLE IF NOT EXISTS participants (
-    giveawayName TEXT,
-    username TEXT,
-    PRIMARY KEY (giveawayName, username),
-    FOREIGN KEY (giveawayName) REFERENCES giveaways(name) ON DELETE CASCADE
-  )`);
+  db.run(`
+    CREATE TABLE IF NOT EXISTS participants (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      giveawayId INTEGER,
+      participant TEXT,
+      FOREIGN KEY (giveawayId) REFERENCES giveaways(id)
+    )
+  `);
 });
 
 module.exports = {
-  addGiveaway(name, description, winners, endTime) {
+  addGiveaway(name, description, winners, endTime, messageId) {
     return new Promise((resolve, reject) => {
-      dbg.run(`INSERT INTO giveaways (name, description, winners, endTime, participants) VALUES (?, ?, ?, ?, ?)`,
-        [name, description, winners, endTime, ''],
-        (err) => {
-          if (err) reject(err);
-          resolve();
+      db.run(
+        `INSERT INTO giveaways (name, description, winners, endTime, messageId) VALUES (?, ?, ?, ?, ?)`,
+        [name, description, winners, endTime, messageId],
+        function (err) {
+          if (err) return reject(err);
+          resolve(this.lastID);
         }
       );
     });
   },
 
-  getGiveaway(name) {
+  getGiveawayByMessageId(messageId) {
     return new Promise((resolve, reject) => {
-      dbg.get(`SELECT * FROM giveaways WHERE name = ?`, [name], (err, row) => {
-        if (err) reject(err);
+      db.get(`SELECT * FROM giveaways WHERE messageId = ?`, [messageId], (err, row) => {
+        if (err) return reject(err);
         resolve(row);
       });
     });
   },
 
-  updateGiveaway(oldName, newName, description, winners, endTime) {
-    return new Promise((resolve, reject) => {
-      dbg.run(`UPDATE giveaways SET name = ?, description = ?, winners = ?, endTime = ? WHERE name = ?`,
-        [newName, description, winners, endTime, oldName],
-        (err) => {
-          if (err) reject(err);
-          resolve();
-        }
-      );
-    });
-  },
-
   deleteGiveaway(name) {
     return new Promise((resolve, reject) => {
-      dbg.run(`DELETE FROM giveaways WHERE name = ?`, [name], (err) => {
-        if (err) reject(err);
+      db.run(`DELETE FROM giveaways WHERE name = ?`, [name], function (err) {
+        if (err) return reject(err);
         resolve();
       });
     });
   },
 
-  addParticipant(giveawayName, username) {
+  addParticipant(giveawayId, participant) {
     return new Promise((resolve, reject) => {
-      dbg.run(`INSERT INTO participants (giveawayName, username) VALUES (?, ?)`,
-        [giveawayName, username],
-        (err) => {
-          if (err) reject(err);
+      db.run(
+        `INSERT INTO participants (giveawayId, participant) VALUES (?, ?)`,
+        [giveawayId, participant],
+        function (err) {
+          if (err) return reject(err);
           resolve();
         }
       );
     });
   },
 
-  removeParticipant(giveawayName, username) {
+  removeParticipant(giveawayId, participant) {
     return new Promise((resolve, reject) => {
-      dbg.run(`DELETE FROM participants WHERE giveawayName = ? AND username = ?`,
-        [giveawayName, username],
-        (err) => {
-          if (err) reject(err);
+      db.run(
+        `DELETE FROM participants WHERE giveawayId = ? AND participant = ?`,
+        [giveawayId, participant],
+        function (err) {
+          if (err) return reject(err);
           resolve();
         }
       );
     });
   },
 
-  getParticipants(giveawayName) {
+  getParticipants(giveawayId) {
     return new Promise((resolve, reject) => {
-      dbg.all(`SELECT username FROM participants WHERE giveawayName = ?`, [giveawayName], (err, rows) => {
-        if (err) reject(err);
-        resolve(rows.map(row => row.username));
+      db.all(`SELECT participant FROM participants WHERE giveawayId = ?`, [giveawayId], (err, rows) => {
+        if (err) return reject(err);
+        resolve(rows.map(row => row.participant));
+      });
+    });
+  },
+
+  getAllGiveaways() {
+    return new Promise((resolve, reject) => {
+      db.all(`SELECT * FROM giveaways`, (err, rows) => {
+        if (err) return reject(err);
+        resolve(rows);
       });
     });
   }

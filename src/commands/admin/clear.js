@@ -12,7 +12,7 @@ module.exports = {
      * @param {Client} client 
      */
     async execute(interaction, client) {
-        const logChannelId = '1287064901289902096';
+        const logChannelId = '1284195111726485565';
 
         if (!interaction.member || !interaction.member.permissions.has(PermissionFlagsBits.ManageMessages)) {
             return interaction.reply({ content: 'Nie masz uprawnień do zarządzania wiadomościami.', ephemeral: true });
@@ -44,7 +44,7 @@ module.exports = {
                     .setTitle("🗑️ Clear")
                     .setDescription(`**Liczba:** ${fetchedMessages.size}\n**Kanał:** ${interaction.channel}\n**Użytkownik:** <@${interaction.user.id}>`)
                     .setColor("White")
-                    .setFooter({ text: ` © 2024 • AstroBot ` })
+                    .setFooter({ text: ` © 2024 • ZygzakCode ` })
                     .setTimestamp();
                 await logChannel.send({ embeds: [logEmbed] });
             } else {

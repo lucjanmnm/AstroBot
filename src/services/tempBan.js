@@ -49,7 +49,6 @@ async function checkWarningsAndApplyTempBan(client, userId, guildId) {
             });
 
             await member.ban({ reason: '5 ostrzeżeń - tempban' });
-            console.log(`Successfully banned user ${userId}`);
 
             const embed = new EmbedBuilder()
               .setTitle('Temporary Ban')
@@ -79,7 +78,6 @@ async function checkWarningsAndApplyTempBan(client, userId, guildId) {
             setTimeout(async () => {
               try {
                 await guild.members.unban(userId, 'Temp ban skonczył się.');
-                console.log(`Successfully unbanned user ${userId}`);
               } catch (err) {
                 console.error('Error unbanning user:', err.message);
               }
@@ -99,7 +97,6 @@ async function checkWarningsAndApplyTempBan(client, userId, guildId) {
           resolve();
         });
       } else {
-        console.log(`No action needed. Warning count for user ${userId} is less than 5.`);
         resolve();
       }
     });

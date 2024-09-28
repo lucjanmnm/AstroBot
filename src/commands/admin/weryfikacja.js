@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, EmbedBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -20,9 +20,10 @@ module.exports = {
     client.tempMathProblem = { num1, num2, correctAnswer };
 
     const verificationEmbed = new EmbedBuilder()
-      .setTitle('Weryfikacja || AstroBot')
+      .setTitle('Weryfikacja || ZygzakCode')
       .setDescription('Witaj, aby się zweryfikować należy kliknąć przycisk poniżej.\n・Pamiętaj, wchodząc na serwer akceptujesz automatycznie regulamin serwera')
-      .setFooter({text: ` © 2024 • AstroBot `});
+      .setImage('https://i.imgur.com/AIa9CgP.png')
+      .setFooter({text: ` © 2024 • ZygzakCode `});
 
     const verificationButton = new ButtonBuilder()
       .setCustomId('verification_button')

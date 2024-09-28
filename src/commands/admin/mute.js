@@ -50,7 +50,7 @@ module.exports = {
         .setTitle('Mute!')
         .setDescription(`> Użytkownik <@${user.id}> został wyciszony na ${time} minut\n\n**Powód:**\n ${reason}\n**Moderator:**\n<@${interaction.user.id}>`)
         .setColor('Red')
-        .setFooter({ text: '© 2024 • AstroBot' })
+        .setFooter({ text: '© 2024 • ZygzakCode' })
         .setTimestamp();
       await interaction.channel.send({ embeds: [currentChannelLogEmbed] });
 

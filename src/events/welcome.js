@@ -15,11 +15,12 @@ module.exports = {
           const people = member.guild.memberCount;
 
           const welcomeEmbed = new EmbedBuilder()
-          .setTitle(`Witaj ${member.user.username} na AstroBot!`)
+          .setTitle(`Witaj ${member.user.username} na ZygzakCode!`)
           .setDescription(`<@${member.user.id}> mamy nadzieję, że zostaniesz u nas na dłużej 😁\n-# Aktualnie posiadamy: **${people}** osób.`)
             .setColor('Green')
             .setThumbnail(member.user.displayAvatarURL())
-            .setFooter({text: ` © 2024 • AstroBot `})
+            .setImage('https://i.imgur.com/fqECjAi.png')
+            .setFooter({text: ` © 2024 • ZygzakCode `})
             .setTimestamp();
 
           await welcomeChannel.send({ embeds: [welcomeEmbed] });

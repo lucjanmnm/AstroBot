@@ -59,7 +59,7 @@ module.exports = {
                 '[JPG](' + jpgAvatarUrl + ') | ' +
                 '[WEBP](' + webpAvatarUrl + ')'
             )
-            .setFooter({text: ` © 2024 • AstroBot `})
+            .setFooter({text: ` © 2024 • ZygzakCode `})
             .setTimestamp();
 
         await interaction.editReply({ embeds: [userInfoEmbed] });
