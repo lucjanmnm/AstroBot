@@ -6,7 +6,6 @@ const path = require("path");
 require("dotenv").config();
 
 /**
- * Rekurencyjnie przeszukuje foldery i zwraca listę plików.
  * 
  * @param {string} dirPath - Ścieżka do folderu.
  * @returns {string[]} - Lista plików.
@@ -28,7 +27,6 @@ function getAllFiles(dirPath) {
 }
 
 /**
- * Ładuje komendy z folderu i rejestruje je na Discordzie.
  * 
  * @param {Client} client - Obiekt klienta Discord.
  */
@@ -63,7 +61,6 @@ async function loadCommands(client) {
 }
 
 /**
- * Ładuje eventy z folderu.
  * 
  * @param {Client} client - Obiekt klienta Discord.
  */

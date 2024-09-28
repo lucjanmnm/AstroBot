@@ -16,10 +16,11 @@ module.exports = {
 
           const welcomeEmbed = new EmbedBuilder()
           .setTitle(`Witaj ${member.user.username} na ZygzakCode - Usługi Minecraft!`)
-          .setDescription(`<@${member.user.id}> mamy nadzieję, że zostaniesz u nas na dłużej 😁\n Aktualnie posiadamy: **${people}** osób.`)
+          .setDescription(`<@${member.user.id}> mamy nadzieję, że zostaniesz u nas na dłużej 😁\n-# Aktualnie posiadamy: **${people}** osób.`)
             .setColor('Green')
             .setThumbnail(member.user.displayAvatarURL())
             .setFooter({text: ` © 2024 • ZygzakCode `})
+            .setImage('https://i.imgur.com/fqECjAi.png')
             .setTimestamp();
 
           await welcomeChannel.send({ embeds: [welcomeEmbed] });

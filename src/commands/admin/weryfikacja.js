@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, EmbedBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -22,6 +22,7 @@ module.exports = {
     const verificationEmbed = new EmbedBuilder()
       .setTitle('Weryfikacja || ZygzakCraft.pl')
       .setDescription('Witaj, aby się zweryfikować należy kliknąć przycisk poniżej.\n・Pamiętaj, wchodząc na serwer akceptujesz automatycznie regulamin serwera')
+      .setImage('https://i.imgur.com/AIa9CgP.png')
       .setFooter({text: ` © 2024 • ZygzakCode `});
 
     const verificationButton = new ButtonBuilder()
@@ -31,6 +32,7 @@ module.exports = {
 
     const row = new ActionRowBuilder().addComponents(verificationButton);
 
-    await interaction.reply({ embeds: [verificationEmbed], components: [row] });
+    interaction.channel.send({ embeds: [verificationEmbed], components: [row] })
+    await interaction.reply({ content: `Weryfikacja utworzona`, ephemeral: true });
   },
 };

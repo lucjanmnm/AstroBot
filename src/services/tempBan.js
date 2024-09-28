@@ -1,17 +1,15 @@
 const { EmbedBuilder } = require('discord.js');
-const db = require('../utils/warns'); // Adjust the path if needed
+const db = require('../utils/warns'); 
 
-const TEMP_BAN_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+const TEMP_BAN_DURATION = 7 * 24 * 60 * 60 * 1000; 
 
 /**
- * Check warnings and apply a temporary ban if needed.
- * @param {Client} client - The Discord client.
- * @param {string} userId - The ID of the user to check.
- * @param {string} guildId - The ID of the guild.
+ * @param {Client} client 
+ * @param {string} userId 
+ * @param {string} guildId 
  */
 async function checkWarningsAndApplyTempBan(client, userId, guildId) {
   return new Promise((resolve, reject) => {
-    // Get the count of warnings for the user
     db.all(`SELECT COUNT(*) AS count FROM warns WHERE user_id = ? AND guild_id = ?`, [userId, guildId], async (err, rows) => {
       if (err) {
         console.error('Error fetching warnings count:', err);
@@ -19,9 +17,9 @@ async function checkWarningsAndApplyTempBan(client, userId, guildId) {
       }
       
       const warningCount = rows[0].count;
+      console.log(`Warning count for user ${userId}: ${warningCount}`);
       
       if (warningCount >= 5) {
-        // Apply temporary ban
         const unbanTime = Date.now() + TEMP_BAN_DURATION;
         
         db.run(`INSERT OR REPLACE INTO temp_bans (user_id, guild_id, unban_time) VALUES (?, ?, ?)`, [userId, guildId, unbanTime], async (err) => {
@@ -30,46 +28,79 @@ async function checkWarningsAndApplyTempBan(client, userId, guildId) {
             return reject(err);
           }
 
-          // Get the guild and member
           const guild = client.guilds.cache.get(guildId);
           if (!guild) {
             console.error('Guild not found.');
-            return resolve(); // Proceed even if the guild is not found
+            return resolve();
           }
 
           const member = guild.members.cache.get(userId);
           if (!member) {
             console.error('Member not found.');
-            return resolve(); // Proceed even if the member is not found
+            return resolve();
           }
 
           try {
-            await member.timeout(TEMP_BAN_DURATION, '5 warnings');
-            console.log(`Applied temporary ban to ${userId} for 7 days due to 5 warnings.`);
-            
-            // Send embed message
+            const dmEmbed = new EmbedBuilder()
+              .setColor('Red')
+              .setDescription(`❌ Zostałeś tymczasowo zbanowany na serwerze: ${guild.name}. Powód: 5 ostrzeżeń na czas: 7 dni`);
+            await member.send({ embeds: [dmEmbed] }).catch(err => {
+              console.error('Failed to send DM to the banned user:', err);
+            });
+
+            await member.ban({ reason: '5 ostrzeżeń - tempban' });
+            console.log(`Successfully banned user ${userId}`);
+
             const embed = new EmbedBuilder()
               .setTitle('Temporary Ban')
               .setDescription(`<@${userId}> został(a) tymczasowo zbanowany(a) na 7 dni z powodu 5 ostrzeżeń.`)
               .setColor('#FF0000')
               .setTimestamp();
 
-            const logChannel = guild.channels.cache.get('1284195111726485568'); // Replace with your log channel ID
+            const logChannel = guild.channels.cache.get('1284195111726485568'); 
             if (logChannel) {
               logChannel.send({ embeds: [embed] });
             } else {
               console.error('Log channel not found.');
             }
 
+            db.run(`DELETE FROM warns WHERE user_id = ? AND guild_id = ?`, [userId, guildId], (err) => {
+              if (err) {
+                console.error('Error removing warnings:', err);
+              }
+            });
+
+            db.run(`INSERT INTO warns (user_id, guild_id, reason, timestamp) VALUES (?, ?, ?, ?)`, [userId, guildId, '5 ostrzeżeń - tempban', Date.now()], (err) => {
+              if (err) {
+                console.error('Error adding new warning:', err);
+              }
+            });
+
+            setTimeout(async () => {
+              try {
+                await guild.members.unban(userId, 'Temp ban skonczył się.');
+                console.log(`Successfully unbanned user ${userId}`);
+              } catch (err) {
+                console.error('Error unbanning user:', err.message);
+              }
+
+              db.run(`DELETE FROM temp_bans WHERE user_id = ? AND guild_id = ?`, [userId, guildId], (err) => {
+                if (err) {
+                  console.error('Error deleting temporary ban from database:', err.message);
+                }
+              });
+            }, TEMP_BAN_DURATION);
+
           } catch (error) {
-            console.error('Error applying timeout:', error);
+            console.error('Error banning the user: ', error);
             return reject(error);
           }
 
           resolve();
         });
       } else {
-        resolve(); // No action needed if warning count is less than 5
+        console.log(`No action needed. Warning count for user ${userId} is less than 5.`);
+        resolve();
       }
     });
   });

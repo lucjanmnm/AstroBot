@@ -37,7 +37,6 @@ module.exports = {
     const unbanTime = Date.now() + (time * 60 * 1000);
 
     try {
-      // Send DM to the user
       const dmEmbed = new EmbedBuilder()
         .setColor('Red')
         .setDescription(`❌ Zostałeś tymczasowo zbanowany na serwerze: ${interaction.guild.name}. Powód: ${reason} na czas: ${time} minut`);
@@ -45,10 +44,8 @@ module.exports = {
         console.error('Failed to send DM to the banned user:', err);
       });
 
-      // Ban the member
       await member.ban({ reason: `Temp ban za: ${reason} na czas: ${time} minut` });
 
-      // Log the ban
       const logChannel = interaction.channel;
       if (logChannel) {
         const logEmbed = new EmbedBuilder()
@@ -62,21 +59,18 @@ module.exports = {
         console.error('Failed to find a valid log channel.');
       }
 
-      // Insert temp ban into database
       db.run(`INSERT INTO temp_bans (user_id, guild_id, unban_time) VALUES (?, ?, ?)`, [user.id, guild.id, unbanTime], (err) => {
         if (err) {
           console.error('Error inserting temporary ban into database:', err.message);
         }
       });
 
-      // Update ban channel name
       const banChannel = await interaction.guild.channels.fetch(banChannelId);
       if (banChannel) {
         const banCount = await interaction.guild.bans.fetch().then(bans => bans.size);
         await banChannel.setName(`⛔ Bany: ${banCount}`);
       }
 
-      // Schedule unban
       setTimeout(async () => {
         try {
           await guild.members.unban(user.id, 'Temp ban skonczył się.');
@@ -89,7 +83,7 @@ module.exports = {
             console.error('Error deleting temporary ban from database:', err.message);
           }
         });
-      }, time * 60 * 1000); // Unban after the specified time
+      }, time * 60 * 1000); 
     } catch (error) {
       console.error('Error banning the user: ', error);
       interaction.reply({ content: 'Wystąpił błąd podczas próby zbanowania użytkownika.', ephemeral: true });

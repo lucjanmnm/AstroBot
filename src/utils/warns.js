@@ -1,7 +1,9 @@
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./warns.db', (err) => {
+const db = new sqlite3.Database('./src/utils/warns.db', (err) => {
   if (err) {
     console.error('Błąd podczas otwierania bazy danych:', err.message);
+  } else {
+    console.log('Connected to the warns database.');
   }
 });
 

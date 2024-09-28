@@ -23,6 +23,8 @@ module.exports = {
     const reason = interaction.options.getString('powód') || 'Brak powodu';
     const guild = interaction.guild;
     const member = guild.members.cache.get(user.id);
+    const logChannelId = '1284195111726485566';
+    const logChannel = interaction.client.channels.cache.get(logChannelId);
 
     if (!interaction.member.permissions.has(PermissionFlagsBits.ModerateMembers)) {
       return interaction.reply({ content: 'Nie posiadasz uprawnień do wyciszania członków.', ephemeral: true });
@@ -37,7 +39,6 @@ module.exports = {
 
       await member.timeout(muteDuration, reason);
 
-      // Send DM to the user
       const dmEmbed = new EmbedBuilder()
         .setColor('Red')
         .setDescription(`🔇 Zostałeś wyciszony na serwerze: ${interaction.guild.name} na ${time} minut. Powód: ${reason}`);
@@ -45,18 +46,23 @@ module.exports = {
         console.error('Failed to send DM to the muted user:', err);
       });
 
-      // Log the mute
-      const logChannel = interaction.channel;
+      const currentChannelLogEmbed = new EmbedBuilder()
+        .setTitle('Mute!')
+        .setDescription(`> Użytkownik <@${user.id}> został wyciszony na ${time} minut\n\n**Powód:**\n ${reason}\n**Moderator:**\n<@${interaction.user.id}>`)
+        .setColor('Red')
+        .setFooter({ text: '© 2024 • ZygzakCode' })
+        .setTimestamp();
+      await interaction.channel.send({ embeds: [currentChannelLogEmbed] });
+
       if (logChannel) {
         const logEmbed = new EmbedBuilder()
           .setTitle('Mute!')
-          .setDescription(`> Użytkownik <@${user.id}> został wyciszony na ${time} minut\n\n**Powód:**\n ${reason}\n**Moderator:**\n<@${interaction.user.id}>`)
-          .setColor('Red')
-          .setFooter({ text: '© 2024 • ZygzakCode' })
+          .setDescription(`**Użytkownik:** <@${user.id}>\n**Czas:** ${time} minut.\n**Powód:** ${reason}\n**Moderator:** <@${interaction.user.id}>`)
+          .setColor('Purple')
           .setTimestamp();
         await logChannel.send({ embeds: [logEmbed] });
       } else {
-        console.error('Failed to find a valid log channel.');
+        console.error(`Nie znaleziono kanału logów o ID ${logChannelId}`);
       }
 
       interaction.reply({ content: `Użytkownik ${user.tag} został wyciszony na ${time} minut za: ${reason}.`, ephemeral: true });

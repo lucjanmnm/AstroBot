@@ -1,4 +1,4 @@
-const db = require('./database');
+const db = require('./src/utils/database');
 
 const checkTempBans = async (client) => {
     db.all(`SELECT * FROM temp_bans`, async (err, rows) => {

@@ -14,6 +14,7 @@ module.exports = {
     async execute(interaction, client) {
         await interaction.deferReply({ ephemeral: true });
         const banChannelId = '1284195110615122006';
+        const logChannelId = '1284195111726485566';
 
         if (!interaction.member.permissions.has(PermissionFlagsBits.BanMembers)) {
             return interaction.editReply({ content: "Nie posiadasz uprawnień do banowania członków." });
@@ -51,20 +52,21 @@ module.exports = {
 
             await target.ban({ reason: reason });
 
-            const logChannel = interaction.channel;
+            const logEmbed = new EmbedBuilder()
+                .setTitle("Ban!")
+                .setDescription(`**Użytkownik:** <@${target.id}> został zbanowany\n**Powód:** ${reason}\n**Moderator:** <@${interaction.user.id}>`)
+                .setColor("Red")
+                .setFooter({ text: ` © 2024 • ZygzakCode ` })
+                .setTimestamp();
 
+            const logChannel = await interaction.guild.channels.fetch(logChannelId);
             if (logChannel) {
-                const logEmbed = new EmbedBuilder()
-                    .setTitle("Ban!")
-                    .setDescription(`> Użytkownik <@${target.id}> został zbanowany\n\n**Powód:**\n ${reason}\n**Moderator:**\n<@${interaction.user.id}>`)
-                    .setColor("Red")
-                    .setFooter({text: ` © 2024 • ZygzakCode `})
-                    .setTimestamp();
-
                 await logChannel.send({ embeds: [logEmbed] });
             } else {
-                console.error("Failed to find a valid log channel.");
+                console.error(`Nie znaleziono kanału logów o ID ${logChannelId}`);
             }
+
+            await interaction.channel.send({ embeds: [logEmbed] });
 
             const banChannel = await interaction.guild.channels.fetch(banChannelId);
             if (banChannel) {
@@ -72,7 +74,7 @@ module.exports = {
                 await banChannel.setName(`⛔ Bany: ${banCount}`);
             }
 
-            await interaction.editReply({ content: `Użytkownik <@${target.id}> został pomyślnie zbanowany.`});
+            await interaction.editReply({ content: `Użytkownik <@${target.id}> został pomyślnie zbanowany.` });
         } catch (error) {
             console.error("Error banning the user: ", error);
             interaction.editReply({ content: "Wystąpił błąd podczas próby zbanowania użytkownika." });

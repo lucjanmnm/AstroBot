@@ -35,13 +35,11 @@ module.exports = {
                 break;
         }
 
-        // Linki do avatarów
         const avatarUrl = user.displayAvatarURL({ format: 'png', dynamic: true });
         const gifAvatarUrl = user.displayAvatarURL({ format: 'gif', dynamic: true });
         const jpgAvatarUrl = user.displayAvatarURL({ format: 'jpg', dynamic: false });
         const webpAvatarUrl = user.displayAvatarURL({ format: 'webp', dynamic: true });
 
-        // Convert dates to Unix timestamps (in seconds)
         const accountCreationTimestamp = Math.floor(user.createdAt.getTime() / 1000);
         const joinDateTimestamp = Math.floor(member.joinedAt.getTime() / 1000);
 

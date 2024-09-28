@@ -14,10 +14,11 @@ module.exports = {
 
       const byeEmbed = new EmbedBuilder()
         .setTitle(`Żegnaj ${member.user.username} opuściłeś ZygzakCode - Usługi Minecraft!`)
-        .setDescription(`<@${member.user.id}> mamy nadzieję, że kiedyś do nas wrócisz 😭\n Aktualnie posiadamy: **${people}** osób.`)
+        .setDescription(`<@${member.user.id}> mamy nadzieję, że kiedyś do nas wrócisz 😭\n-# Aktualnie posiadamy: **${people}** osób.`)
         .setColor('Red')
         .setThumbnail(member.user.displayAvatarURL())
         .setFooter({text: ` © 2024 • ZygzakCode `})
+        .setImage('https://i.imgur.com/3sGcOFa.png')
         .setTimestamp();
 
       await byeChannel.send({ embeds: [byeEmbed] });
