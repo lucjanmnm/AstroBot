@@ -42,7 +42,7 @@ module.exports = {
         .setTitle('Kick!')
         .setDescription(`**Użytkownik:** <@${user.id}> został wyrzucony\n**Powód:** ${reason}\n**Moderator:** <@${interaction.user.id}>`)
         .setColor('Red')
-        .setFooter({ text: ` © 2024 • ZygzakCode ` })
+        .setFooter({ text: ` © 2024 • AstroBot ` })
         .setTimestamp();
 
       const logChannel = await interaction.guild.channels.fetch(logChannelId);

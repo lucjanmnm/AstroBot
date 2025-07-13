@@ -54,8 +54,8 @@ module.exports = {
             const currentCommands = commandsWithIds.slice(i, i + 25);
             const embed = new EmbedBuilder()
                 .setTitle('`⚒️` Help:')
-                .setDescription('`»` Lista komend bota ZygzakCode `«`')
-                .setFooter({text: ` © 2024 • ZygzakCode • lucjanmnm `})
+                .setDescription('`»` Lista komend bota AstroBot `«`')
+                .setFooter({text: ` © 2024 • AstroBot • lucjanmnm `})
                 .setColor('Blue');
 
             currentCommands.forEach((command, index) => {

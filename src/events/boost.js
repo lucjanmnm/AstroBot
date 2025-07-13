@@ -23,7 +23,7 @@ module.exports = {
         .setDescription(`Dziękujemy, <@${newMember.user.id}> za zboostowanie serwera! \n Serwer ma teraz **${boosts}** boostów!`)
         .setColor('Purple')
         .setThumbnail(newMember.user.displayAvatarURL())
-        .setFooter({text: ` © 2024 • ZygzakCode `})
+        .setFooter({text: ` © 2024 • AstroBot `})
         .setTimestamp();
 
       await boostChannel.send({ embeds: [boostEmbed] });

@@ -52,7 +52,7 @@ module.exports = {
           .setTitle('Temp Ban!')
           .setDescription(`> Użytkownik <@${user.id}> został tymczasowo zbanowany\n\n**Powód:**\n ${reason}\n**Czas:**\n ${time} minut\n**Moderator:**\n<@${interaction.user.id}>`)
           .setColor('Red')
-          .setFooter({ text: '© 2024 • ZygzakCode' })
+          .setFooter({ text: '© 2024 • AstroBot' })
           .setTimestamp();
           interaction.reply({ embeds: [logEmbed] });
       } else {

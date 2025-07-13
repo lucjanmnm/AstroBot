@@ -20,11 +20,11 @@ module.exports = {
       try {
         const guild = await client.guilds.fetch('1284195110237769801'); 
         const proposalEmbed = new EmbedBuilder()
-          .setTitle(`Propozycja || ZygzakCode`)
+          .setTitle(`Propozycja || AstroBot`)
           .setDescription(`> **Autor Propozycji:**\n> <@${message.author.id}>\n\n> **Treść Propozycji:**\n> ` + '`' + `${message.content}` + '`')
           .setThumbnail(guild.iconURL({ size: 1024 }))
           .setTimestamp()
-          .setFooter({ text: `© 2024 • ZygzakCode` })
+          .setFooter({ text: `© 2024 • AstroBot` })
           .setColor('#00FF00');
 
         const actionRow = new ActionRowBuilder()

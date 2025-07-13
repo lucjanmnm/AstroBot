@@ -35,7 +35,7 @@ module.exports = {
                     .setTitle("Unban!")
                     .setDescription(`> Użytkownik o ID ${userId} został odbanowany\n\n**Moderator:**\n<@${interaction.user.id}>`)
                     .setColor("Yellow")
-                    .setFooter({text: ` © 2024 • ZygzakCode `})
+                    .setFooter({text: ` © 2024 • AstroBot `})
                     .setTimestamp();
 
                 await logChannel.send({ embeds: [logEmbed] });

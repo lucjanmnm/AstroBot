@@ -45,7 +45,7 @@ module.exports = {
           .setTitle('Unwarn!')
           .setDescription(`> Ostrzeżenia dla użytkownika <@${user.id}> zostały usunięte\n\n**Moderator:**\n<@${interaction.user.id}>`)
           .setColor('Green')
-          .setFooter({ text: '© 2024 • ZygzakCode' })
+          .setFooter({ text: '© 2024 • AstroBot' })
           .setTimestamp();
         await logChannel.send({ embeds: [logEmbed] });
       } else {

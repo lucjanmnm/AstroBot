@@ -38,7 +38,7 @@ module.exports = {
           .setTitle('Unmute!')
           .setDescription(`> Użytkownik <@${user.id}> został odciszony\n\n**Moderator:**\n<@${interaction.user.id}>`)
           .setColor('Green')
-          .setFooter({ text: '© 2024 • ZygzakCode' })
+          .setFooter({ text: '© 2024 • AstroBot' })
           .setTimestamp();
         await logChannel.send({ embeds: [logEmbed] });
       } else {

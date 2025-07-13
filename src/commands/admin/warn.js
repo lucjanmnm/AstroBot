@@ -43,7 +43,7 @@ module.exports = {
           .setTitle('Warn!')
           .setDescription(`> Użytkownik <@${user.id}> został ostrzeżony\n\n**Powód:**\n ${reason}\n**Moderator:**\n<@${interaction.user.id}>`)
           .setColor('Yellow')
-          .setFooter({ text: '© 2024 • ZygzakCode' })
+          .setFooter({ text: '© 2024 • AstroBot' })
           .setTimestamp();
         await logChannel.send({ embeds: [logEmbed] });
       } else {

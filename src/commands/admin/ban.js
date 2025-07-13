@@ -56,7 +56,7 @@ module.exports = {
                 .setTitle("Ban!")
                 .setDescription(`**Użytkownik:** <@${target.id}> został zbanowany\n**Powód:** ${reason}\n**Moderator:** <@${interaction.user.id}>`)
                 .setColor("Red")
-                .setFooter({ text: ` © 2024 • ZygzakCode ` })
+                .setFooter({ text: ` © 2024 • AstroBot ` })
                 .setTimestamp();
 
             const logChannel = await interaction.guild.channels.fetch(logChannelId);

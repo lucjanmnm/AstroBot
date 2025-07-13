@@ -44,7 +44,7 @@ module.exports = {
                     .setTitle("🗑️ Clear")
                     .setDescription(`**Liczba:** ${fetchedMessages.size}\n**Kanał:** ${interaction.channel}\n**Użytkownik:** <@${interaction.user.id}>`)
                     .setColor("White")
-                    .setFooter({ text: ` © 2024 • ZygzakCode ` })
+                    .setFooter({ text: ` © 2024 • AstroBot ` })
                     .setTimestamp();
                 await logChannel.send({ embeds: [logEmbed] });
             } else {
